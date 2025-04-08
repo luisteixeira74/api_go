@@ -1,0 +1,27 @@
+# Binários compilados
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Diretório de build
+/build/
+bin/
+
+# Arquivos do SQLite
+*.sqlite
+
+# Configs locais e secrets
+.env
+.env.*.local
+
+# Arquivos do editor/IDE
+.vscode/
+.idea/
+*.swp
+
+# Módulo do Go
+/go.sum
+
