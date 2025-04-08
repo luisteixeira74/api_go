@@ -14,11 +14,11 @@ func NewUser(db *gorm.DB) *User {
 	return &User{DB: db}
 }
 
-func (u *User) CreateUser(user *entity.User) error {
+func (u *User) Create(user *entity.User) error {
 	return u.DB.Create(user).Error
 }
 
-func (u *User) FindByEmail(email string) (*entity.User, error) {
+func (u *User) GetByEmail(email string) (*entity.User, error) {
 	var user entity.User
 	err := u.DB.Where("email = ?", email).First(&user).Error
 	if err != nil {
