@@ -1,1 +1,22 @@
-API de Products e Users com autenticação JWT
+# 🛠️ API de Products e Users com Autenticação JWT
+
+Este projeto é uma API REST desenvolvida em Go, utilizando o framework [Chi](https://github.com/go-chi/chi), com autenticação JWT para proteger rotas sensíveis.
+
+## 🚀 Funcionalidades
+
+- CRUD de **Products**
+- Registro e login de **Users**
+- Proteção de rotas com **JWT**
+- Handlers organizados por contexto
+- Configurações via arquivo `.env`
+
+## ⚙️ Como executar o projeto
+
+cp cmd/server/.env.example cmd/server/.env
+
+go run cmd/server/main.go 
+
+A aplicação estará rodando em: http://localhost:8080
+
+As rotas /products são protegidas por middleware JWT. 
+É necessário incluir o token no header Authorization: Bearer <token> para acessá-las.
