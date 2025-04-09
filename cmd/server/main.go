@@ -9,13 +9,33 @@ import (
 	"fmt"
 	"net/http"
 
+	_ "apis/docs"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/jwtauth/v5"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
+// @title Swagger Example API
+// @version 1.0
+// @description This is a sample server.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.email email@email.com
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:8080
+// @BasePath /
+// @schemes http
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	cfg, err := configs.LoadConfig()
 	if err != nil {
@@ -67,10 +87,17 @@ func setupHandlers(db *gorm.DB, cfg *configs.Conf) (*handlers.ProductHandler, *h
 func setupRouter(cfg *configs.Conf, productHandler *handlers.ProductHandler, userHandler *handlers.UserHandler) http.Handler {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	// recovers from panics, logs the panic (and a backtrace), and returns a HTTP 500 (Internal Server Error) status if possible
+	r.Use(middleware.Recoverer)
+	r.Use(middleware.WithValue("jwt", cfg.TokenAuth))
+	r.Use(middleware.WithValue("jwtExpiresIn", cfg.JwtExpiresIn))
 
 	// Rotas públicas
 	r.Post("/users", userHandler.Create)
 	r.Post("/users/login", userHandler.GenerateJWT)
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
+	))
 
 	// Rotas protegidas
 	registerProtectedRoutes(r, cfg, productHandler)
@@ -91,6 +118,5 @@ func registerProtectedRoutes(r chi.Router, cfg *configs.Conf, productHandler *ha
 			r.Put("/{id}", productHandler.Update)
 			r.Delete("/{id}", productHandler.Delete)
 		})
-
 	})
 }

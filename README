@@ -20,3 +20,28 @@ A aplicação estará rodando em: http://localhost:8080
 
 As rotas /products são protegidas por middleware JWT. 
 É necessário incluir o token no header Authorization: Bearer <token> para acessá-las.
+
+A pasta test/ contém arquivos .http com requisições prontas
+
+Exemplos:
+
+user.http: Criar usuário, login, obter JWT
+
+product.http: Criar, listar, atualizar e deletar produtos (requer JWT)
+
+## 📘 Documentação da API (Swagger)
+
+Esta aplicação possui documentação interativa via Swagger, gerada automaticamente com a biblioteca [swaggo/swag](https://github.com/swaggo/swag).
+
+### 🔗 Acessar Swagger
+
+Após iniciar o servidor, acesse:
+
+👉 [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
+
+### ⚙️ Gerar documentação
+
+Para gerar ou atualizar os arquivos de documentação Swagger, execute o comando:
+
+```bash
+swag init -g cmd/server/main.go

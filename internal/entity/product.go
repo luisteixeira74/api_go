@@ -23,12 +23,18 @@ type Product struct {
 }
 
 func NewProduct(name string, price float64) (*Product, error) {
-	return &Product{
+	p := &Product{
 		ID:        entity.NewID(),
 		Name:      name,
 		Price:     price,
 		CreatedAt: time.Now().GoString(),
-	}, nil
+	}
+
+	if err := p.Validate(); err != nil {
+		return nil, err
+	}
+
+	return p, nil
 }
 
 func (p *Product) Validate() error {
@@ -41,9 +47,6 @@ func (p *Product) Validate() error {
 	}
 	if p.Name == "" {
 		return ErrNameIsRequired
-	}
-	if p.Price == 0 {
-		return ErrPriceIsRequired
 	}
 	if p.Price <= 0 {
 		return ErrInvalidPrice
